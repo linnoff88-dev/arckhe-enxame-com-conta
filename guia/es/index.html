@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Enxame com Conta — la idea es genial, la cuenta no</title>
+<meta name="description" content="Antes de montar un enjambre de agentes de IA, completa la Ficha de la Cuenta: comprueba si vale la pena, estima cuánto cuesta frente a un solo agente, fija un presupuesto y un límite, y mide el costo por resultado útil. Kit gratis en Python, sin API.">
+<link rel="alternate" hreflang="pt-BR" href="https://inematds.github.io/enxame-com-conta/guia/">
+<link rel="alternate" hreflang="en" href="https://inematds.github.io/enxame-com-conta/guia/en/">
+<link rel="alternate" hreflang="es" href="https://inematds.github.io/enxame-com-conta/guia/es/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0c0c10; --bg2:#14141b; --card:#16161e; --line:#272730;
+    --txt:#e9e9ee; --mut:#9a9aa6; --amb:#FACC15; --amb2:#f0c070; --sky:#38bdf8; --pro:#cbd5e1;
+    color-scheme:dark;
+  }
+  body.light{
+    --bg:#f6f7f9; --bg2:#eceef2; --card:#ffffff; --line:#e1e3ea;
+    --txt:#1a1a22; --mut:#5b5b68; --amb:#a16207; --amb2:#a16207; --sky:#0369a1; --pro:#b45309;
+    color-scheme:light;
+  }
+  body.light .hero .glow{opacity:.5}
+  body.light pre{background:#0e0e14;color:#d6d6e0}
+  body.light pre .c{color:#8a8a98}
+  body.light pre .k{color:#f0c070}
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--txt);font:16px/1.65 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  h1,h2,h3{font-family:Sora,sans-serif;line-height:1.15;margin:0}
+  a{color:var(--amb);text-decoration:none}
+  code,pre{font-family:"JetBrains Mono",monospace}
+  .wrap{max-width:1160px;margin:0 auto;padding:0 22px}
+  .mut{color:var(--mut)} .amb{color:var(--amb)}
+  .chip{display:inline-block;font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:var(--amb);font-weight:600;font-family:Sora}
+  nav{position:sticky;top:0;z-index:30;backdrop-filter:blur(12px);background:rgba(12,12,16,.78);border-bottom:1px solid var(--line)}
+  body.light nav{background:rgba(246,247,249,.85)}
+  nav .wrap{display:flex;align-items:center;gap:22px;height:60px}
+  nav .brand{display:flex;align-items:center;gap:8px;font-family:Sora;font-weight:800;letter-spacing:-.02em;color:var(--amb)}
+  nav .brand .emoji{font-size:1.25rem}
+  nav .sep{color:var(--mut);opacity:.45}
+  nav .inema{color:var(--sky);font-weight:600;font-size:.88rem;font-family:Sora}
+  nav .inema:hover{filter:brightness(1.15)}
+  nav .pro{color:var(--pro);font-weight:600;font-size:.88rem;font-family:Sora}
+  nav .pro:hover{filter:brightness(1.15)}
+  nav .clubpro{display:inline-flex;align-items:center;gap:6px}
+  nav .links{margin-left:auto;display:flex;align-items:center;gap:16px;font-size:.86rem}
+  nav .brand,nav .links a{white-space:nowrap}
+  nav .links a.sec{color:var(--mut)} nav .links a.sec:hover{color:var(--txt)}
+  .lang{display:inline-flex;gap:2px;font-family:Sora;font-size:.78rem}
+  .lang a{color:var(--mut);padding:.2em .45em;border-radius:6px} .lang a.on{color:var(--amb);background:rgba(250,204,21,.12)}
+  .tgl{background:var(--bg2);border:1px solid var(--line);color:var(--txt);width:38px;height:38px;border-radius:10px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-size:1.05rem}
+  .tgl:hover{border-color:var(--amb)}
+  .btn{display:inline-block;background:var(--amb);color:#1a1206;font-weight:600;padding:.6em 1.05em;border-radius:10px;font-family:Sora}
+  body.light .btn{background:#FACC15;color:#1a1206}
+  .btn.ghost{background:transparent;color:var(--txt);border:1px solid var(--line)}
+  @media(max-width:1100px){nav .links a.sec{display:none}}
+  @media(max-width:520px){nav .wrap{gap:8px;padding:8px 14px;height:auto;flex-wrap:wrap} nav .links{gap:8px;margin-left:0;width:100%;justify-content:space-between} nav .btn{padding:.45em .7em;font-size:.82rem} .tgl{width:34px;height:34px}}
+  .hero{position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+  .hero .glow{position:absolute;inset:-40% -20% auto auto;width:70%;height:600px;background:radial-gradient(closest-side,rgba(250,204,21,.18),transparent 70%);pointer-events:none}
+  .hero .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center;padding:70px 22px}
+  .hero h1{font-size:clamp(1.9rem,4vw,2.7rem);font-weight:800;letter-spacing:-.025em}
+  .hero p.lead{font-size:1.15rem;color:var(--mut);margin:1.1em 0 1.6em;max-width:44ch}
+  .hero .cta{display:flex;gap:12px;flex-wrap:wrap}
+  .hero figure{margin:0;border-radius:16px;overflow:hidden;border:1px solid var(--line);box-shadow:0 30px 80px -30px #000}
+  .hero figure img{width:100%;height:auto;display:block}
+  .resumo{padding:38px 0 34px;border-bottom:1px solid var(--line)}
+  .resumo p{font-size:1.12rem;line-height:1.7;max-width:74ch;margin:.55em 0 0}
+  .bigfig{margin:28px 0 0;border-radius:16px;overflow:hidden;border:1px solid var(--line)}
+  .bigfig img{width:100%;display:block;height:auto}
+  @media(max-width:780px){.hero .wrap{grid-template-columns:1fr;padding:44px 22px}}
+  section{padding:62px 0;border-bottom:1px solid var(--line)}
+  section h2{font-size:clamp(1.5rem,3.4vw,2.1rem);font-weight:800;letter-spacing:-.02em}
+  section .sub{color:var(--mut);margin:.6em 0 2em;max-width:66ch}
+  .grid{display:grid;gap:16px}
+  .g3{grid-template-columns:repeat(3,1fr)} .g4{grid-template-columns:repeat(4,1fr)} .g2{grid-template-columns:repeat(2,1fr)}
+  @media(max-width:820px){.g3,.g4{grid-template-columns:1fr 1fr}}
+  @media(max-width:540px){.g2,.g3,.g4{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px}
+  .card h3{font-size:1.05rem;margin-bottom:.4em}
+  .card p{color:var(--mut);font-size:.94rem;margin:0}
+  .card ul{color:var(--mut);font-size:.94rem;margin:.3em 0 0;padding-left:1.1em}
+  .flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0 26px}
+  .flow span{background:var(--bg2);border:1px solid var(--line);border-radius:999px;padding:.45em .9em;font-size:.86rem;font-family:Sora;font-weight:600}
+  .flow .arr{color:var(--amb);border:none;background:none;padding:0 .1em}
+  pre{background:#0a0a0e;border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;font-size:.84rem;line-height:1.6;color:#d6d6e0;white-space:pre-wrap;overflow-wrap:normal;word-break:normal;overflow-x:auto}
+  .nw{white-space:nowrap}
+  .campos{list-style:none;padding:0;margin:0 0 .4em;display:grid;gap:6px}
+  .campos li{font-size:.92rem;color:var(--mut)}
+  .campos code{color:var(--txt);font-weight:600}
+  pre .c{color:#7d7d8a} pre .k{color:var(--amb2)} pre .s{color:#9ece6a} pre .bad{color:#f28b82}
+  .step{display:grid;grid-template-columns:46px minmax(0,1fr);gap:16px;margin-bottom:28px}
+  .step>div,.card{min-width:0}
+  p code,li code,td code{overflow-wrap:anywhere;font-size:.88em;background:var(--bg2);border:1px solid var(--line);border-radius:6px;padding:.05em .35em}
+  .step .b{width:46px;height:46px;border-radius:12px;background:#FACC15;color:#1a1206;font-family:Sora;font-weight:800;font-size:1.25rem;display:flex;align-items:center;justify-content:center}
+  .step h3{font-size:1.12rem;margin-bottom:.3em}
+  .step p{color:var(--mut);margin:.2em 0 .7em}
+  .ex{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media(max-width:680px){.ex{grid-template-columns:1fr}}
+  .ex figure{margin:0;border-radius:14px;overflow:hidden;border:1px solid var(--line)}
+  .ex figure img{width:100%;height:auto;display:block}
+  .ex figcaption{padding:12px 14px;font-size:.88rem;color:var(--mut);background:var(--card)}
+  .ex figcaption small{display:block;margin-top:.3em;opacity:.8}
+  .phase{display:flex;gap:14px;padding:16px 0;border-bottom:1px solid var(--line)}
+  .phase:last-child{border:none}
+  .phase .tag{flex:0 0 92px;font-family:Sora;font-weight:800;color:var(--amb)}
+  .phase .d strong{display:block;margin-bottom:.2em}
+  .phase .d span{color:var(--mut);font-size:.92rem}
+  .note{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--amb);border-radius:12px;padding:14px 18px;margin:0 0 24px;color:var(--txt);font-size:.95rem}
+  body.light .note{border-left-color:#EAB308;background:#FEF9C3}
+  .note.warn{border-left-color:#f28b82}
+  .tbl{width:100%;border-collapse:collapse;font-size:.92rem}
+  .tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px}
+  .tbl th,.tbl td{padding:12px 14px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+  .tbl th{font-family:Sora;font-size:.85rem;background:var(--bg2)}
+  .tbl td{color:var(--mut)}
+  .tbl td:first-child{color:var(--txt);font-weight:600;white-space:nowrap}
+  .tbl tr.hl td{background:rgba(250,204,21,.07)}
+  .tbl tr:last-child td{border-bottom:none}
+  @media(max-width:640px){
+    .tblwrap{border:none}
+    .tbl,.tbl tbody,.tbl tr,.tbl td{display:block;width:100%}
+    .tbl tr:first-child{display:none}
+    .tbl tr{border:1px solid var(--line);border-radius:14px;margin-bottom:12px;background:var(--card);overflow:hidden}
+    .tbl td{border-bottom:1px solid var(--line);padding:9px 14px}
+    .tbl td:first-child{font-family:Sora;font-size:1.05rem;background:var(--bg2)}
+    .tbl td[data-l]::before{content:attr(data-l) ": ";font-weight:600;color:var(--txt)}
+  }
+  .ficha{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:6px 20px}
+  .ficha .row{display:grid;grid-template-columns:170px minmax(0,1fr);gap:14px;padding:14px 0;border-bottom:1px solid var(--line)}
+  .ficha .row:last-child{border:none}
+  .ficha .row b{font-family:Sora;color:var(--amb)}
+  .ficha .row span{color:var(--mut)}
+  @media(max-width:600px){.ficha .row{grid-template-columns:1fr;gap:4px}}
+  .video{aspect-ratio:16/9;border:1px dashed var(--line);border-radius:16px;background:var(--card);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;text-align:center;padding:20px}
+  .video strong{font-family:Sora;font-size:1.2rem}
+  .video span{color:var(--mut);font-size:.95rem;max-width:52ch}
+  .videos{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px}
+  .vid figcaption{font-family:Sora;font-weight:600;margin:0 0 8px}
+  .vid iframe{width:100%;aspect-ratio:16/9;border:0;border-radius:16px;background:#000;display:block}
+  .techhead{background:var(--bg2);border-top:3px solid var(--amb);padding:58px 0 8px}
+  .techhead h2{font-family:Sora;margin:.3em 0 0;font-size:clamp(1.5rem,3.4vw,2.1rem)}
+  .techhead p{color:var(--mut);max-width:66ch}
+  .techzone{background:var(--bg2)}
+  .fecho{text-align:center}
+  .fecho h2{max-width:30ch;margin:0 auto}
+  .fecho p{color:var(--mut);max-width:60ch;margin:1em auto 1.4em}
+  footer{padding:46px 0;text-align:center;color:var(--mut);font-size:.9rem}
+  .pill{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:.3em .8em;font-size:.78rem;color:var(--mut);margin:0 4px 6px}
+</style>
+</head>
+<body>
+
+<nav><div class="wrap">
+  <a class="brand" href="#top"><span class="emoji">🧮</span> Enxame com Conta</a>
+  <span class="sep">|</span>
+  <span class="clubpro">
+    <a class="inema" href="https://inema.club" target="_blank" rel="noopener">INEMA.CLUB</a>
+    <span class="sep">-</span>
+    <a class="pro" href="https://inema.pro" target="_blank" rel="noopener">PRO</a>
+  </span>
+  <div class="links">
+    <a class="sec" href="#video">Vídeo</a>
+    <a class="sec" href="#custo">Por qué cuesta</a>
+    <a class="sec" href="#cru">El cálculo correcto</a>
+    <a class="sec" href="#caso">Caso real</a>
+    <a class="sec" href="#ficha">La ficha</a>
+    <a class="sec" href="#tecnico">Kit (técnico)</a>
+    <span class="lang"><a href="../">PT</a><a href="../en/">EN</a><a class="on" href="./">ES</a></span>
+    <button class="tgl" id="themeToggle" aria-label="Alternar tema" title="Alternar tema">🌙</button>
+    <a class="btn" href="https://github.com/inematds/enxame-com-conta" target="_blank" rel="noopener">GitHub</a>
+  </div>
+</div></nav>
+
+<header class="hero" id="top">
+  <div class="glow"></div>
+  <div class="wrap">
+    <div>
+      <span class="chip">Enjambre de agentes · costo</span>
+      <h1>¿Viste el enjambre viral de agentes y quieres montar uno? Completa la <span class="amb">Ficha de la Cuenta</span> antes. La idea es genial. La cuenta, no.</h1>
+      <p class="lead">El video muestra a diez agentes trabajando juntos. No muestra la factura. Cada agente vuelve a leerlo todo, conversa con los demás y repite lo que salió mal, y tú pagas cada palabra. La Ficha de la Cuenta, con dos scripts gratis, hace los cálculos antes de ejecutar y pone un límite al gasto.</p>
+      <div class="cta">
+        <a class="btn" href="#custo">Entender en 5 minutos</a>
+        <a class="btn ghost" href="https://github.com/inematds/enxame-com-conta" target="_blank" rel="noopener">Ver en GitHub</a>
+      </div>
+    </div>
+    <figure><img src="../assets/banner-es.jpg" alt="Banner La cuenta del enjambre: un edificio de oficinas de noche rodeado por un enjambre de pequeños robots dorados, con una factura larga que sale por una ventana"></figure>
+  </div>
+</header>
+
+<section id="resumo" class="resumo"><div class="wrap">
+  <span class="chip">En resumen</span>
+  <p>Un <strong>enjambre de agentes</strong> es cuando varias IA trabajan juntas en la misma tarea, cada una en una parte. Funciona, pero cuesta mucho más: la propia Anthropic midió unas <strong>15 veces</strong> más texto procesado que en un chat normal. La <strong>Ficha de la Cuenta</strong> es una hoja breve para quienes piensan usar enjambres en el trabajo: pregunta si la tarea lo requiere, compara el costo con un solo agente y fija un límite y un freno antes de ejecutar. El kit gratis incluye la ficha y dos scripts en Python que hacen los cálculos y controlan el gasto. Para entenderlo, solo tienes que leer; para usar el kit, necesitas Python 3.</p>
+  <figure class="bigfig"><img src="../assets/banner-grade-es.jpg" alt="Los 6 puntos de la ficha: si vale la pena, cálculo previo, un agente frente a un enjambre, presupuesto y freno, costo por resultado y el caso real de los 12.619 rechazos" loading="lazy"></figure>
+</div></section>
+
+<section id="video"><div class="wrap">
+  <span class="chip">Vídeo</span>
+  <h2>Entiéndelo en pocos minutos</h2>
+  <p class="sub">El video explicativo del kit aparecerá aquí cuando se publique. Mientras tanto, las secciones siguientes lo explican todo en texto.</p>
+  <!-- VIDEO: entra o explicavideo do projeto quando publicado -->
+</div></section>
+
+<section id="custo"><div class="wrap">
+  <span class="chip">Por qué cuesta</span>
+  <h2>Cada agente adicional vuelve a leerlo todo</h2>
+  <p class="sub">En un enjambre, nadie trabaja gratis para los demás. Cada agente recibe todo el contexto, lee lo que enviaron sus compañeros, escribe su parte y, si algo sale mal, lo repite. Todo eso es texto que entra y sale del modelo, y pagas por ese texto.</p>
+  <div class="grid g4">
+    <div class="card"><h3>📖 Trabajo</h3><p>Cada agente vuelve a leer el contexto (todo lo que necesita saber para trabajar) y la tarea en cada ronda. Seis agentes en tres rondas son dieciocho lecturas, no una.</p></div>
+    <div class="card"><h3>💬 Coordinación</h3><p>Los agentes intercambian mensajes. Uno escribe cada mensaje y los demás lo leen; así que se cuenta dos veces.</p></div>
+    <div class="card"><h3>🔍 Revisión</h3><p>Quien revisa lee todo lo que entregaron los demás. Es buena idea, pero también tiene un costo.</p></div>
+    <div class="card"><h3>🔁 Rehacer</h3><p>Lo que vuelve de la revisión se hace de nuevo, y repetir multiplica el costo de la parte que falló.</p></div>
+  </div>
+  <div class="note" style="margin-top:24px"><strong>La cifra:</strong> en el artículo sobre su propio sistema de investigación con varios agentes, Anthropic cuenta que los agentes usan unas <strong>4 veces</strong> más tokens que un chat y los sistemas multiagente, unas <strong>15 veces</strong> más. También dice que solo compensan en tareas cuyo valor justifica el mayor rendimiento. Fuente: <a href="https://www.anthropic.com/engineering/multi-agent-research-system" target="_blank" rel="noopener">How we built our multi-agent research system</a> (junio de 2025). Un token es la unidad de texto por la que cobra el modelo.</div>
+  <p class="mut">El enjambre también tiene ventajas: en el mismo artículo, el sistema multiagente obtuvo un resultado un 90,2 % mejor que un solo agente en su evaluación interna. La pregunta no es si el enjambre funciona, sino si la mejora compensa el costo adicional.</p>
+</div></section>
+
+<section id="cru"><div class="wrap">
+  <span class="chip">El cálculo correcto</span>
+  <h2>No preguntes «¿funcionó el enjambre?». Pregunta cuánto costó cada entrega buena.</h2>
+  <p class="sub">La medida del kit es el <strong>costo por resultado útil</strong>: todo lo que gastaste dividido entre las entregas que alguien aprobó. Una ejecución rechazada cuenta como gasto, pero no como resultado.</p>
+  <div class="tblwrap"><table class="tbl">
+    <tr><th></th><th>Gasto total</th><th>Entregas aprobadas</th><th>Costo por entrega buena</th><th>Tiempo promedio</th></tr>
+    <tr><td>Un solo agente</td><td data-l="Gasto total">US$ 1,20 en 3 intentos</td><td data-l="Entregas aprobadas">2 de 3</td><td data-l="Costo por entrega buena">US$ 0,60</td><td data-l="Tempo médio">17,7 min</td></tr>
+    <tr class="hl"><td>Enjambre</td><td data-l="Gasto total">US$ 9,30 en 3 intentos</td><td data-l="Entregas aprobadas">3 de 3</td><td data-l="Costo por entrega buena">US$ 3,10</td><td data-l="Tempo médio">7 min</td></tr>
+  </table></div>
+  <p class="mut" style="margin-top:14px;font-size:.9rem">Cifras ilustrativas del ejemplo incluido en el kit. Cámbialas por las de tu tarea.</p>
+  <div class="note" style="margin-top:18px"><strong>Conclusión de este ejemplo:</strong> el enjambre cuesta 5,2 veces más por entrega aprobada y acierta 1,5 veces más. Solo vale la pena si cada entrega buena vale más de 5,2 veces el costo de un solo agente. Fue 2,5 veces más rápido, así que la decisión real es: ¿el plazo justifica esa diferencia? El kit escribe esta conclusión automáticamente (<a href="#guia">cómo usarlo ↓</a>).</div>
+</div></section>
+
+<section id="caso"><div class="wrap">
+  <span class="chip">Caso real de INEMA</span>
+  <h2>El proceso que chocó contra el límite 12.619 veces</h2>
+  <p class="sub">Entre el 15 y el 16 de noviembre de 2026, un programador automático de revisiones de video de aquí llamaba a la IA directamente, sin ningún control. La suscripción tiene un límite de uso semanal; cuando se agotó, se rechazó cada solicitud y el proceso siguió solicitándolas.</p>
+  <div class="grid g4">
+    <div class="card"><h3>12.619</h3><p>rechazos por límite de uso en unas 34 horas, alrededor de 400 por hora.</p></div>
+    <div class="card"><h3>34 h</h3><p>sin ninguna revisión de video. El trabajo útil se detuvo y nadie se dio cuenta.</p></div>
+    <div class="card"><h3>4,9 GB</h3><p>de registros inútiles en el disco, en 13 mil sesiones que no hicieron nada.</p></div>
+    <div class="card"><h3>~ US$ 0</h3><p>de dinero: los rechazos no se cobran. La pérdida fue tiempo y trabajo detenido.</p></div>
+  </div>
+  <div class="note" style="margin-top:24px"><strong>La lección para los enjambres:</strong> la solución no fue reescribir el sistema. Faltaban tres protecciones: detenerse ante el primer aviso de límite, terminar el ciclo con el primer error y hacer que todos los procesos pasaran por la misma puerta. Un enjambre son varios procesos que llaman a la IA al mismo tiempo. Sin un freno que todos respeten, el mismo error ocurre muchas más veces y más rápido. Más detalles en el <a href="https://github.com/inematds/enxame-com-conta/blob/main/casos/lote-135.md" target="_blank" rel="noopener">informe del caso (en portugués)</a>.</div>
+</div></section>
+
+<section id="ficha"><div class="wrap">
+  <span class="chip">La Ficha de la Cuenta</span>
+  <h2>Cuatro partes, antes y después de ejecutar</h2>
+  <p class="sub">La ficha es un archivo de texto que copias a la carpeta de la tarea y completas. Si no puedes responder la primera parte, no montes el enjambre.</p>
+  <div class="ficha">
+    <div class="row"><b>1. ¿Vale la pena?</b><span>¿La tarea se divide en partes que no dependen unas de otras? ¿Es amplia (muchas fuentes, muchos archivos)? ¿Importa más el plazo que el costo? ¿Cada entrega buena vale mucho más que ejecutarla? Si respondes «sí» a menos de dos preguntas, usa <strong>un solo agente</strong>.</span></div>
+    <div class="row"><b>2. El cálculo previo</b><span>Estima cuánto cuesta el enjambre y cuánto cuesta un solo agente para la misma tarea, y en qué se va el dinero: trabajo, conversación entre agentes, revisión o repetición.</span></div>
+    <div class="row"><b>3. Presupuesto y freno</b><span>Obligatorio: el máximo de agentes, llamadas y fallos consecutivos. Si alcanzas el límite de uso, detén todo y espera. Decide quién revisa el resultado y cómo sabrás que está listo. No dejes nada ejecutándose en un bucle sin supervisión.</span></div>
+    <div class="row"><b>4. El cálculo real</b><span>Después, anota cada ejecución real, con un agente y con el enjambre, y compara el costo por entrega aprobada. Si el enjambre gastó Y veces más y entregó X veces mejor, con Y mayor que X y sin que el plazo lo justifique, resultó caro.</span></div>
+  </div>
+</div></section>
+
+<div id="tecnico" class="techhead"><div class="wrap">
+  <span class="chip">Parte técnica</span>
+  <h2>El kit: para calcular y poner un freno de verdad</h2>
+  <p>No necesitas esta parte para entender lo anterior.</p>
+</div></div>
+
+<div class="techzone">
+
+<section id="oque"><div class="wrap">
+  <span class="chip">Qué es</span>
+  <h2>Una ficha y dos scripts</h2>
+  <p class="sub">Python 3 con la biblioteca estándar. No hay que instalar paquetes ni usar claves de API: los scripts no llaman a ningún modelo, solo hacen cálculos y deciden si se ejecuta tu comando.</p>
+  <div class="grid g3">
+    <div class="card"><h3>📝 FICHA-CONTA.md</h3><p>Las cuatro partes anteriores, en formato de lista para marcar y completar.</p></div>
+    <div class="card"><h3>🧮 conta.py</h3><p><code>estimar</code> calcula los tokens y el costo del enjambre frente a un solo agente a partir de un plan. <code>comparar</code> lee las ejecuciones reales y calcula el costo por resultado útil y la conclusión.</p></div>
+    <div class="card"><h3>🛑 trava.py</h3><p>Un freno para cualquier llamada a un agente (<code>claude -p</code>, <code>codex exec</code> o un script tuyo): se detiene ante el primer límite, tiene un máximo de llamadas y se para después de N fallos consecutivos. Varios procesos pueden compartir el mismo archivo de estado.</p></div>
+  </div>
+</div></section>
+
+<section id="fluxo"><div class="wrap">
+  <span class="chip">Cómo funciona</span>
+  <h2>De «¿y si…?» a la conclusión</h2>
+  <p class="sub">🧠 tú decides · ⚙️ el script del kit calcula · 🤖 tu agente trabaja, siempre a través del freno.</p>
+  <div class="flow">
+    <span>🧠 ¿Vale la pena?</span><span class="arr">→</span>
+    <span>⚙️ conta.py estimar</span><span class="arr">→</span>
+    <span>🧠 Presupuesto</span><span class="arr">→</span>
+    <span>🤖 Agentes a través de trava.py</span><span class="arr">→</span>
+    <span>🧠 Anotar las ejecuciones</span><span class="arr">→</span>
+    <span>⚙️ conta.py comparar</span><span class="arr">→</span>
+    <span>🧠 Decidir</span>
+  </div>
+</div></section>
+
+<section id="pre"><div class="wrap">
+  <span class="chip">Requisitos</span>
+  <h2>Qué necesitas</h2>
+  <p class="sub">Solo Python 3 y el kit descargado. El freno usa el bloqueo de archivos del sistema (<code>fcntl</code>), así que funciona en Linux y macOS; en Windows, usa WSL.</p>
+  <div class="grid g2">
+    <div class="card"><h3>Descargar el kit</h3><p>Clona el repositorio y entra en la carpeta.</p><pre><span class="k">git clone</span> <span class="s"><span class="nw">https://github.com/inematds/enxame-com-conta</span></span>
+<span class="k">cd</span> <span class="nw">enxame-com-conta</span></pre></div>
+    <div class="card"><h3>Comprobar que funciona</h3><p>Los 15 tests deben pasar.</p><pre><span class="k">python3 <span class="nw">-m</span> unittest discover <span class="nw">-s</span> tests <span class="nw">-v</span></span>
+<span class="c">Ran 15 tests ... OK</span></pre></div>
+  </div>
+</div></section>
+
+<section id="guia"><div class="wrap">
+  <span class="chip">Guía de uso · paso a paso</span>
+  <h2>De la ficha a la conclusión</h2>
+  <div class="note">Los archivos del kit (la ficha, los ejemplos) y los mensajes de los scripts están en portugués; esta página explica qué significa cada uno. El veredicto del paso 7 dice: «el enjambre cuesta 5,2× más por entrega aprobada y acierta 1,5× más: solo vale si cada entrega aprobada vale más que 5,2× el costo de un solo agente (pero fue 2,5× más rápido: decide si el plazo lo vale)».</div>
+  <p class="sub">Las salidas siguientes son reales: los scripts se ejecutaron con los ejemplos del kit. Las cifras de los ejemplos son ilustrativas.</p>
+
+  <div class="step"><div class="b">1</div><div>
+    <h3>Responde la parte 1 de la ficha</h3>
+    <p>Copia la ficha a la carpeta de la tarea. Si marcas menos de dos opciones en la parte 1, usa un solo agente y detente aquí.</p>
+<pre><span class="k">mkdir <span class="nw">-p</span></span> <span class="nw">minha-tarefa</span>
+<span class="k">cp</span> <span class="nw">FICHA-CONTA.md</span> <span class="nw">minha-tarefa/</span></pre>
+  </div></div>
+
+  <div class="step"><div class="b">2</div><div>
+    <h3>Describe el enjambre en un plan</h3>
+    <p>Copia el ejemplo y cambia las cifras por las de tu tarea. Los tamaños se expresan en tokens.</p>
+<pre><span class="k">cp</span> <span class="nw">exemplos/plano-enxame.json</span> plano.json</pre>
+    <ul class="campos"><li><code>agentes</code>: cuántos agentes tiene el enjambre (6)</li><li><code>rodadas</code>: cuántas rondas hace cada uno (3)</li><li><code>contexto</code>: lo que cada agente lee en cada ronda (20000)</li><li><code>tarefa</code>: el pedido en sí (2000)</li><li><code>saida_por_agente</code>: lo que cada agente escribe por ronda (3000)</li><li><code>mensagens_por_rodada, tamanho_mensagem</code>: conversación entre agentes (2 y 1500)</li><li><code>revisores</code>: cuántos revisan todo (1)</li><li><code>retrabalho</code>: fracción rehecha, de 0 a 1 (0.3)</li><li><code>um_agente</code>: el mismo trabajo hecho por uno solo: rondas y salida (4 y 8000)</li><li><code>preco</code>: US$ por millón de tokens, entrada y salida (3.0 y 15.0)</li></ul>
+  </div></div>
+
+  <div class="step"><div class="b">3</div><div>
+    <h3>Calcula antes de ejecutar</h3>
+    <p>Verás el costo de las dos opciones, cuántas veces más cuesta el enjambre y en qué se va el dinero (en %). Abajo aparece la salida con las cifras del ejemplo, sin cambios.</p>
+<pre><span class="k">python3 conta.py estimar plano.json</span>
+<span class="c">"enxame":    {"entrada": 712400, "saida": 85800, "custo": 3.4242}
+"um_agente": {"entrada": 88000, "saida": 8000, "custo": 0.384}
+"multiplicador_tokens": 8.3
+"onde_vai": {"trabalho": 63.1, "coordenacao": 8.6, "revisao": 5.1, "retrabalho": 23.1}</span></pre>
+    <p>El modelo de costos es deliberadamente sencillo: sirve para comparar arquitecturas, no para predecir la factura al centavo. El cálculo real aparece en el paso 7.</p>
+  </div></div>
+
+  <div class="step"><div class="b">4</div><div>
+    <h3>Decide el presupuesto</h3>
+    <p>En la parte 3 de la ficha, fija el máximo de agentes, llamadas y fallos consecutivos. Esas cifras se convierten en opciones del freno.</p>
+  </div></div>
+
+  <div class="step"><div class="b">5</div><div>
+    <h3>Ejecuta cada llamada a través del freno</h3>
+    <p>Todas las llamadas de la tarea usan el mismo archivo de estado. Si alcanzas el límite (429, «rate limit», «hit your limit»…), bloquea a todos durante <code>--pausa-min</code> minutos (60 por defecto).</p>
+<pre><span class="k">python3 trava.py rodar \
+  <span class="nw">--estado</span> .trava.json \
+  <span class="nw">--max-chamadas</span> 40 \
+  <span class="nw">--max-falhas</span> 3 \
+  <span class="nw">--</span> claude <span class="nw">-p</span></span> <span class="s">"…"</span>
+<span class="c"># salidas: 75 = bloqueada por límite (no se llamó nada)
+#          76 = presupuesto de llamadas agotado
+#          77 = demasiados fallos seguidos</span></pre>
+    <p>Cuando se bloquea, muestra este aviso:</p>
+<pre><span class="c">[trava] limite detectado: bloqueada por 60 min para todos que usam .trava.json.
+[trava] bloqueada (limite de uso); libera em 59 min. Nada foi chamado.</span></pre>
+  </div></div>
+
+  <div class="step"><div class="b">6</div><div>
+    <h3>Supervisa y desbloquea con calma</h3>
+    <p><code>status</code> muestra las llamadas, los fallos y los últimos eventos. <code>liberar</code> borra el bloqueo después de que hayas revisado lo ocurrido. Ambos usan <code>.trava.json</code> por defecto; si en el paso 5 usaste otro archivo, indica el mismo <code>--estado</code>.</p>
+<pre><span class="k">python3 trava.py status</span>
+<span class="c">{"chamadas": 1, "falhas_seguidas": 0, "bloqueada_ate": 0, "motivo": "", "ultimos": [{"rc": 0, "evento": "ok", …}]}</span>
+<span class="k">python3 trava.py liberar</span>   <span class="c"># <span class="nw">--zerar-chamadas</span> también pone el contador en cero</span></pre>
+  </div></div>
+
+  <div class="step"><div class="b">7</div><div>
+    <h3>Anota las ejecuciones y compara</h3>
+    <p>Para la misma tarea, con un agente y con el enjambre: <code>arquitetura</code>, <code>custo</code>, <code>aprovada</code>, <code>retrabalho</code>, <code>minutos</code>.</p>
+<pre><span class="k">cp</span> exemplos/execucoes.json execucoes.json</pre>
+    <ul class="campos"><li><code>arquitetura</code>: <code>um_agente</code> (un solo agente) o <code>enxame</code> (enjambre), solo estos dos valores</li><li><code>custo</code>: cuánto costó esa ejecución</li><li><code>aprovada</code>: <code>true</code> si alguien aprobó la entrega, <code>false</code> si no</li><li><code>retrabalho</code>: fracción rehecha, de 0 a 1</li><li><code>minutos</code>: cuánto tardó</li></ul>
+    <p>Después ejecútalo con tu archivo. Abajo, la salida con el ejemplo:</p>
+<pre><span class="k">python3 conta.py comparar execucoes.json</span>
+<span class="c">"um_agente": {"aprovadas": 2, "custo_total": 1.2, "cru": 0.6, "minutos_medio": 17.7}
+"enxame":    {"aprovadas": 3, "custo_total": 9.3, "cru": 3.1, "minutos_medio": 7.0}
+"veredito": "o enxame custa 5.2× mais por entrega aprovada e acerta 1.5× mais: só vale se cada
+  entrega aprovada valer mais que 5.2× o custo de um agente só (mas foi 2.5× mais rápido:
+  decida se o prazo vale isso)"</span></pre>
+    <p><code>cru</code> es el costo por resultado útil. La decisión final es tuya: conserva el enjambre solo si la mejora del resultado o el plazo justifican el costo adicional.</p>
+  </div></div>
+</div></section>
+
+<section id="roadmap"><div class="wrap">
+  <span class="chip">Hoja de ruta</span>
+  <h2>Lo que viene</h2>
+  <p class="sub">El kit crece con casos reales.</p>
+  <div class="phase"><div class="tag">Ahora</div><div class="d"><strong>Kit v1.0.1</strong><span>Ficha de la Cuenta, conta.py (estimar y comparar), trava.py, el caso lote-135 y 15 tests.</span></div></div>
+  <div class="phase"><div class="tag">Pronto</div><div class="d"><strong>Video explicativo</strong><span>En esta página, en los tres idiomas.</span></div></div>
+  <div class="phase"><div class="tag">Después</div><div class="d"><strong>Más casos medidos</strong><span>Ejecuciones reales de un enjambre frente a un solo agente, con el costo por resultado útil publicado.</span></div></div>
+</div></section>
+
+</div>
+
+<section class="fecho"><div class="wrap">
+  <h2>Y tú, ¿montarás el enjambre o medirás primero?</h2>
+  <p>La Ficha de la Cuenta, los scripts y el caso real están gratis en inema.club, directamente en internet.</p>
+  <a class="btn" href="https://inema.club" target="_blank" rel="noopener">INEMA.CLUB</a>
+</div></section>
+
+<footer>
+  <div class="wrap">
+    <div class="pill">Python 3</div><div class="pill">Biblioteca estándar</div><div class="pill">Sin API</div>
+    <p style="margin-top:18px">Enxame com Conta · kit abierto, licencia MIT ·
+      <a href="https://github.com/inematds/enxame-com-conta">inematds/enxame-com-conta</a> ·
+      kit hermano: <a href="https://inematds.github.io/enxame-antigravity/guia/es/">Ficha del Enjambre, para dividir el /swarm de Google</a> ·
+      <a href="https://inema.club">INEMA.CLUB</a></p>
+  </div>
+</footer>
+
+<script>
+  (function(){
+    var KEY='enxame-com-conta-theme';
+    var b=document.body, t=document.getElementById('themeToggle');
+    try{ if(localStorage.getItem(KEY)==='light'){ b.classList.add('light'); t.textContent='☀️'; } }catch(e){}
+    t.addEventListener('click',function(){
+      var light=b.classList.toggle('light');
+      t.textContent=light?'☀️':'🌙';
+      try{ localStorage.setItem(KEY, light?'light':'dark'); }catch(e){}
+    });
+  })();
+</script>
+</body>
+</html>

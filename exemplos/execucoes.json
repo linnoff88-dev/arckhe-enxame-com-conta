@@ -1,0 +1,44 @@
+[
+  {
+    "arquitetura": "um_agente",
+    "custo": 0.4,
+    "aprovada": true,
+    "retrabalho": 0.1,
+    "minutos": 18
+  },
+  {
+    "arquitetura": "um_agente",
+    "custo": 0.35,
+    "aprovada": false,
+    "retrabalho": 0.0,
+    "minutos": 15
+  },
+  {
+    "arquitetura": "um_agente",
+    "custo": 0.45,
+    "aprovada": true,
+    "retrabalho": 0.2,
+    "minutos": 20
+  },
+  {
+    "arquitetura": "enxame",
+    "custo": 3.1,
+    "aprovada": true,
+    "retrabalho": 0.3,
+    "minutos": 7
+  },
+  {
+    "arquitetura": "enxame",
+    "custo": 2.8,
+    "aprovada": true,
+    "retrabalho": 0.2,
+    "minutos": 6
+  },
+  {
+    "arquitetura": "enxame",
+    "custo": 3.4,
+    "aprovada": true,
+    "retrabalho": 0.4,
+    "minutos": 8
+  }
+]

@@ -1,0 +1,14 @@
+{
+  "_nota": "exemplo ilustrativo: troque os números pelos da sua tarefa e o preço pelo do seu modelo (por milhão de tokens)",
+  "agentes": 6,
+  "rodadas": 3,
+  "contexto": 20000,
+  "tarefa": 2000,
+  "saida_por_agente": 3000,
+  "mensagens_por_rodada": 2,
+  "tamanho_mensagem": 1500,
+  "revisores": 1,
+  "retrabalho": 0.3,
+  "um_agente": {"rodadas": 4, "saida": 8000},
+  "preco": {"entrada": 3.0, "saida": 15.0}
+}

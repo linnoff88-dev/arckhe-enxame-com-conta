@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Enxame com Conta — the idea is brilliant, the bill isn't</title>
+<meta name="description" content="Before building an AI agent swarm, fill out the Cost Sheet: see if it is worth it, estimate its cost compared with a single agent, set a budget and a brake, and measure the cost per useful result. Free Python kit, no API.">
+<link rel="alternate" hreflang="pt-BR" href="https://inematds.github.io/enxame-com-conta/guia/">
+<link rel="alternate" hreflang="en" href="https://inematds.github.io/enxame-com-conta/guia/en/">
+<link rel="alternate" hreflang="es" href="https://inematds.github.io/enxame-com-conta/guia/es/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0c0c10; --bg2:#14141b; --card:#16161e; --line:#272730;
+    --txt:#e9e9ee; --mut:#9a9aa6; --amb:#FACC15; --amb2:#f0c070; --sky:#38bdf8; --pro:#cbd5e1;
+    color-scheme:dark;
+  }
+  body.light{
+    --bg:#f6f7f9; --bg2:#eceef2; --card:#ffffff; --line:#e1e3ea;
+    --txt:#1a1a22; --mut:#5b5b68; --amb:#a16207; --amb2:#a16207; --sky:#0369a1; --pro:#b45309;
+    color-scheme:light;
+  }
+  body.light .hero .glow{opacity:.5}
+  body.light pre{background:#0e0e14;color:#d6d6e0}
+  body.light pre .c{color:#8a8a98}
+  body.light pre .k{color:#f0c070}
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--txt);font:16px/1.65 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  h1,h2,h3{font-family:Sora,sans-serif;line-height:1.15;margin:0}
+  a{color:var(--amb);text-decoration:none}
+  code,pre{font-family:"JetBrains Mono",monospace}
+  .wrap{max-width:1160px;margin:0 auto;padding:0 22px}
+  .mut{color:var(--mut)} .amb{color:var(--amb)}
+  .chip{display:inline-block;font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:var(--amb);font-weight:600;font-family:Sora}
+  nav{position:sticky;top:0;z-index:30;backdrop-filter:blur(12px);background:rgba(12,12,16,.78);border-bottom:1px solid var(--line)}
+  body.light nav{background:rgba(246,247,249,.85)}
+  nav .wrap{display:flex;align-items:center;gap:22px;height:60px}
+  nav .brand{display:flex;align-items:center;gap:8px;font-family:Sora;font-weight:800;letter-spacing:-.02em;color:var(--amb)}
+  nav .brand .emoji{font-size:1.25rem}
+  nav .sep{color:var(--mut);opacity:.45}
+  nav .inema{color:var(--sky);font-weight:600;font-size:.88rem;font-family:Sora}
+  nav .inema:hover{filter:brightness(1.15)}
+  nav .pro{color:var(--pro);font-weight:600;font-size:.88rem;font-family:Sora}
+  nav .pro:hover{filter:brightness(1.15)}
+  nav .clubpro{display:inline-flex;align-items:center;gap:6px}
+  nav .links{margin-left:auto;display:flex;align-items:center;gap:16px;font-size:.86rem}
+  nav .brand,nav .links a{white-space:nowrap}
+  nav .links a.sec{color:var(--mut)} nav .links a.sec:hover{color:var(--txt)}
+  .lang{display:inline-flex;gap:2px;font-family:Sora;font-size:.78rem}
+  .lang a{color:var(--mut);padding:.2em .45em;border-radius:6px} .lang a.on{color:var(--amb);background:rgba(250,204,21,.12)}
+  .tgl{background:var(--bg2);border:1px solid var(--line);color:var(--txt);width:38px;height:38px;border-radius:10px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-size:1.05rem}
+  .tgl:hover{border-color:var(--amb)}
+  .btn{display:inline-block;background:var(--amb);color:#1a1206;font-weight:600;padding:.6em 1.05em;border-radius:10px;font-family:Sora}
+  body.light .btn{background:#FACC15;color:#1a1206}
+  .btn.ghost{background:transparent;color:var(--txt);border:1px solid var(--line)}
+  @media(max-width:1100px){nav .links a.sec{display:none}}
+  @media(max-width:520px){nav .wrap{gap:8px;padding:8px 14px;height:auto;flex-wrap:wrap} nav .links{gap:8px;margin-left:0;width:100%;justify-content:space-between} nav .btn{padding:.45em .7em;font-size:.82rem} .tgl{width:34px;height:34px}}
+  .hero{position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+  .hero .glow{position:absolute;inset:-40% -20% auto auto;width:70%;height:600px;background:radial-gradient(closest-side,rgba(250,204,21,.18),transparent 70%);pointer-events:none}
+  .hero .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center;padding:70px 22px}
+  .hero h1{font-size:clamp(1.9rem,4vw,2.7rem);font-weight:800;letter-spacing:-.025em}
+  .hero p.lead{font-size:1.15rem;color:var(--mut);margin:1.1em 0 1.6em;max-width:44ch}
+  .hero .cta{display:flex;gap:12px;flex-wrap:wrap}
+  .hero figure{margin:0;border-radius:16px;overflow:hidden;border:1px solid var(--line);box-shadow:0 30px 80px -30px #000}
+  .hero figure img{width:100%;height:auto;display:block}
+  .resumo{padding:38px 0 34px;border-bottom:1px solid var(--line)}
+  .resumo p{font-size:1.12rem;line-height:1.7;max-width:74ch;margin:.55em 0 0}
+  .bigfig{margin:28px 0 0;border-radius:16px;overflow:hidden;border:1px solid var(--line)}
+  .bigfig img{width:100%;display:block;height:auto}
+  @media(max-width:780px){.hero .wrap{grid-template-columns:1fr;padding:44px 22px}}
+  section{padding:62px 0;border-bottom:1px solid var(--line)}
+  section h2{font-size:clamp(1.5rem,3.4vw,2.1rem);font-weight:800;letter-spacing:-.02em}
+  section .sub{color:var(--mut);margin:.6em 0 2em;max-width:66ch}
+  .grid{display:grid;gap:16px}
+  .g3{grid-template-columns:repeat(3,1fr)} .g4{grid-template-columns:repeat(4,1fr)} .g2{grid-template-columns:repeat(2,1fr)}
+  @media(max-width:820px){.g3,.g4{grid-template-columns:1fr 1fr}}
+  @media(max-width:540px){.g2,.g3,.g4{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px}
+  .card h3{font-size:1.05rem;margin-bottom:.4em}
+  .card p{color:var(--mut);font-size:.94rem;margin:0}
+  .card ul{color:var(--mut);font-size:.94rem;margin:.3em 0 0;padding-left:1.1em}
+  .flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0 26px}
+  .flow span{background:var(--bg2);border:1px solid var(--line);border-radius:999px;padding:.45em .9em;font-size:.86rem;font-family:Sora;font-weight:600}
+  .flow .arr{color:var(--amb);border:none;background:none;padding:0 .1em}
+  pre{background:#0a0a0e;border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;font-size:.84rem;line-height:1.6;color:#d6d6e0;white-space:pre-wrap;overflow-wrap:normal;word-break:normal;overflow-x:auto}
+  .nw{white-space:nowrap}
+  .campos{list-style:none;padding:0;margin:0 0 .4em;display:grid;gap:6px}
+  .campos li{font-size:.92rem;color:var(--mut)}
+  .campos code{color:var(--txt);font-weight:600}
+  pre .c{color:#7d7d8a} pre .k{color:var(--amb2)} pre .s{color:#9ece6a} pre .bad{color:#f28b82}
+  .step{display:grid;grid-template-columns:46px minmax(0,1fr);gap:16px;margin-bottom:28px}
+  .step>div,.card{min-width:0}
+  p code,li code,td code{overflow-wrap:anywhere;font-size:.88em;background:var(--bg2);border:1px solid var(--line);border-radius:6px;padding:.05em .35em}
+  .step .b{width:46px;height:46px;border-radius:12px;background:#FACC15;color:#1a1206;font-family:Sora;font-weight:800;font-size:1.25rem;display:flex;align-items:center;justify-content:center}
+  .step h3{font-size:1.12rem;margin-bottom:.3em}
+  .step p{color:var(--mut);margin:.2em 0 .7em}
+  .ex{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media(max-width:680px){.ex{grid-template-columns:1fr}}
+  .ex figure{margin:0;border-radius:14px;overflow:hidden;border:1px solid var(--line)}
+  .ex figure img{width:100%;height:auto;display:block}
+  .ex figcaption{padding:12px 14px;font-size:.88rem;color:var(--mut);background:var(--card)}
+  .ex figcaption small{display:block;margin-top:.3em;opacity:.8}
+  .phase{display:flex;gap:14px;padding:16px 0;border-bottom:1px solid var(--line)}
+  .phase:last-child{border:none}
+  .phase .tag{flex:0 0 92px;font-family:Sora;font-weight:800;color:var(--amb)}
+  .phase .d strong{display:block;margin-bottom:.2em}
+  .phase .d span{color:var(--mut);font-size:.92rem}
+  .note{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--amb);border-radius:12px;padding:14px 18px;margin:0 0 24px;color:var(--txt);font-size:.95rem}
+  body.light .note{border-left-color:#EAB308;background:#FEF9C3}
+  .note.warn{border-left-color:#f28b82}
+  .tbl{width:100%;border-collapse:collapse;font-size:.92rem}
+  .tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px}
+  .tbl th,.tbl td{padding:12px 14px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+  .tbl th{font-family:Sora;font-size:.85rem;background:var(--bg2)}
+  .tbl td{color:var(--mut)}
+  .tbl td:first-child{color:var(--txt);font-weight:600;white-space:nowrap}
+  .tbl tr.hl td{background:rgba(250,204,21,.07)}
+  .tbl tr:last-child td{border-bottom:none}
+  @media(max-width:640px){
+    .tblwrap{border:none}
+    .tbl,.tbl tbody,.tbl tr,.tbl td{display:block;width:100%}
+    .tbl tr:first-child{display:none}
+    .tbl tr{border:1px solid var(--line);border-radius:14px;margin-bottom:12px;background:var(--card);overflow:hidden}
+    .tbl td{border-bottom:1px solid var(--line);padding:9px 14px}
+    .tbl td:first-child{font-family:Sora;font-size:1.05rem;background:var(--bg2)}
+    .tbl td[data-l]::before{content:attr(data-l) ": ";font-weight:600;color:var(--txt)}
+  }
+  .ficha{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:6px 20px}
+  .ficha .row{display:grid;grid-template-columns:170px minmax(0,1fr);gap:14px;padding:14px 0;border-bottom:1px solid var(--line)}
+  .ficha .row:last-child{border:none}
+  .ficha .row b{font-family:Sora;color:var(--amb)}
+  .ficha .row span{color:var(--mut)}
+  @media(max-width:600px){.ficha .row{grid-template-columns:1fr;gap:4px}}
+  .video{aspect-ratio:16/9;border:1px dashed var(--line);border-radius:16px;background:var(--card);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;text-align:center;padding:20px}
+  .video strong{font-family:Sora;font-size:1.2rem}
+  .video span{color:var(--mut);font-size:.95rem;max-width:52ch}
+  .videos{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px}
+  .vid figcaption{font-family:Sora;font-weight:600;margin:0 0 8px}
+  .vid iframe{width:100%;aspect-ratio:16/9;border:0;border-radius:16px;background:#000;display:block}
+  .techhead{background:var(--bg2);border-top:3px solid var(--amb);padding:58px 0 8px}
+  .techhead h2{font-family:Sora;margin:.3em 0 0;font-size:clamp(1.5rem,3.4vw,2.1rem)}
+  .techhead p{color:var(--mut);max-width:66ch}
+  .techzone{background:var(--bg2)}
+  .fecho{text-align:center}
+  .fecho h2{max-width:30ch;margin:0 auto}
+  .fecho p{color:var(--mut);max-width:60ch;margin:1em auto 1.4em}
+  footer{padding:46px 0;text-align:center;color:var(--mut);font-size:.9rem}
+  .pill{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:.3em .8em;font-size:.78rem;color:var(--mut);margin:0 4px 6px}
+</style>
+</head>
+<body>
+
+<nav><div class="wrap">
+  <a class="brand" href="#top"><span class="emoji">🧮</span> Enxame com Conta</a>
+  <span class="sep">|</span>
+  <span class="clubpro">
+    <a class="inema" href="https://inema.club" target="_blank" rel="noopener">INEMA.CLUB</a>
+    <span class="sep">-</span>
+    <a class="pro" href="https://inema.pro" target="_blank" rel="noopener">PRO</a>
+  </span>
+  <div class="links">
+    <a class="sec" href="#video">Video</a>
+    <a class="sec" href="#custo">Why it costs</a>
+    <a class="sec" href="#cru">The right calculation</a>
+    <a class="sec" href="#caso">Real case</a>
+    <a class="sec" href="#ficha">The sheet</a>
+    <a class="sec" href="#tecnico">Kit (technical)</a>
+    <span class="lang"><a href="../">PT</a><a class="on" href="./">EN</a><a href="../es/">ES</a></span>
+    <button class="tgl" id="themeToggle" aria-label="Toggle theme" title="Toggle theme">🌙</button>
+    <a class="btn" href="https://github.com/inematds/enxame-com-conta" target="_blank" rel="noopener">GitHub</a>
+  </div>
+</div></nav>
+
+<header class="hero" id="top">
+  <div class="glow"></div>
+  <div class="wrap">
+    <div>
+      <span class="chip">Agent swarm · cost</span>
+      <h1>You saw the viral agent swarm and want to build one? Fill out the <span class="amb">Cost Sheet</span> first. The idea is brilliant. The bill isn't.</h1>
+      <p class="lead">The video shows ten agents working together. It doesn't show the bill. Each agent rereads everything, talks to the others, and redoes what went wrong. You pay for every word. The Cost Sheet, with two free scripts, calculates the cost before you run anything and puts a brake on spending.</p>
+      <div class="cta">
+        <a class="btn" href="#custo">Understand it in 5 minutes</a>
+        <a class="btn ghost" href="https://github.com/inematds/enxame-com-conta" target="_blank" rel="noopener">View on GitHub</a>
+      </div>
+    </div>
+    <figure><img src="../assets/banner-en.jpg" alt="Swarm bill: an office building at night surrounded by a swarm of small golden robots, with a long bill coming out of a window"></figure>
+  </div>
+</header>
+
+<section id="resumo" class="resumo"><div class="wrap">
+  <span class="chip">In short</span>
+  <p>An <strong>agent swarm</strong> is a group of AIs working together on the same task, each handling one part. It works, but costs much more: Anthropic measured about <strong>15 times</strong> more text processed than a regular chat. The <strong>Cost Sheet</strong> is a short worksheet for anyone considering swarms at work: it asks whether the task calls for one, compares the cost with a single agent, and sets a cap and a brake before you run it. The free kit includes the sheet and two Python scripts that calculate costs and limit spending. You only need to read this page to understand it; you need Python 3 to use the kit.</p>
+  <figure class="bigfig"><img src="../assets/banner-grade-en.jpg" alt="The sheet's 6 points: is it worth it, calculate first, single agent versus swarm, budget and brake, cost per result, and the real case of 12,619 denials" loading="lazy"></figure>
+</div></section>
+
+<section id="video"><div class="wrap">
+  <span class="chip">Video</span>
+  <h2>Understand it in a few minutes</h2>
+  <p class="sub">The kit explainer video will appear here once it is published. For now, the sections below explain everything in text.</p>
+  <!-- VIDEO: entra o explicavideo do projeto quando publicado -->
+</div></section>
+
+<section id="custo"><div class="wrap">
+  <span class="chip">Why it costs</span>
+  <h2>Every extra agent reads everything again</h2>
+  <p class="sub">In a swarm, no one works for free for the others. Each agent gets the full context, reads what its colleagues sent, writes its part, and tries again if something goes wrong. All of that is text going into and out of the model, and that's what you pay for.</p>
+  <div class="grid g4">
+    <div class="card"><h3>📖 Work</h3><p>Each agent rereads the context (everything it needs to know to do the work) and the task every round. Six agents over three rounds means eighteen reads, not one.</p></div>
+    <div class="card"><h3>💬 Coordination</h3><p>Agents exchange messages. One writes each message, others read it, so it counts twice.</p></div>
+    <div class="card"><h3>🔍 Review</h3><p>The reviewer reads everything the others delivered. Good idea, but it has a cost too.</p></div>
+    <div class="card"><h3>🔁 Rework</h3><p>Anything sent back for review must be redone, multiplying the cost of the part that failed.</p></div>
+  </div>
+  <div class="note" style="margin-top:24px"><strong>The numbers:</strong> in an article about its own multi-agent research system, Anthropic says agents use about <strong>4 times</strong> more tokens than a chat, and multi-agent systems about <strong>15 times</strong> more. It also says they are worthwhile only for tasks where the extra performance is worth the cost. Source: <a href="https://www.anthropic.com/engineering/multi-agent-research-system" target="_blank" rel="noopener">How we built our multi-agent research system</a> (June 2025). A token is the unit of text the model charges for.</div>
+  <p class="mut">Swarms also have an upside: in the same article, Anthropic's multi-agent system scored 90.2% better than a single agent in its internal evaluation. The question isn't whether a swarm works. It's whether the better result is worth the higher cost.</p>
+</div></section>
+
+<section id="cru"><div class="wrap">
+  <span class="chip">The right calculation</span>
+  <h2>Don't ask, “Did the swarm work?” Ask how much each good deliverable cost.</h2>
+  <p class="sub">The kit measures <strong>cost per useful result</strong>: everything you spent divided by the deliverables someone approved. Rejected runs count toward spending, not toward results.</p>
+  <div class="tblwrap"><table class="tbl">
+    <tr><th></th><th>Total spent</th><th>Approved deliverables</th><th>Cost per good deliverable</th><th>Average time</th></tr>
+    <tr><td>Single agent</td><td data-l="Total spent">US$ 1.20 in 3 attempts</td><td data-l="Approved deliverables">2 of 3</td><td data-l="Cost per good deliverable">US$ 0.60</td><td data-l="Average time">17.7 min</td></tr>
+    <tr class="hl"><td>Swarm</td><td data-l="Total spent">US$ 9.30 in 3 attempts</td><td data-l="Approved deliverables">3 of 3</td><td data-l="Cost per good deliverable">US$ 3.10</td><td data-l="Average time">7 min</td></tr>
+  </table></div>
+  <p class="mut" style="margin-top:14px;font-size:.9rem">Illustrative numbers from the example included in the kit. Replace them with your task's numbers.</p>
+  <div class="note" style="margin-top:18px"><strong>The verdict for this example:</strong> the swarm costs 5.2 times more per approved deliverable and gets it right 1.5 times more often. It is worthwhile only if each good deliverable is worth more than 5.2 times the cost of a single agent. It was 2.5 times faster, so the real decision is: is the time saved worth the difference? The kit writes this verdict for you (<a href="#guia">how to use it ↓</a>).</div>
+</div></section>
+
+<section id="caso"><div class="wrap">
+  <span class="chip">A real INEMA case</span>
+  <h2>The process that hit the limit 12,619 times</h2>
+  <p class="sub">Between November 15 and 16, 2026, an automatic video review scheduler here called the AI directly, with no safeguards. The subscription has a weekly usage limit. Once it ran out, every request was denied, but the process kept asking.</p>
+  <div class="grid g4">
+    <div class="card"><h3>12,619</h3><p>usage limit denials in about 34 hours, around 400 per hour.</p></div>
+    <div class="card"><h3>34 h</h3><p>with no video reviews at all. Useful work stopped, and no one noticed.</p></div>
+    <div class="card"><h3>4.9 GB</h3><p>of useless logs on disk, across 13 thousand sessions that did nothing.</p></div>
+    <div class="card"><h3>~ US$ 0</h3><p>in money: denied requests aren't charged. The loss was time and stalled work.</p></div>
+  </div>
+  <div class="note" style="margin-top:24px"><strong>The lesson for swarms:</strong> the fix wasn't to rewrite the system. Three safeguards were missing: stop at the first usage limit warning, end the cycle at the first error, and route every process through the same gate. A swarm is several processes calling the AI at once. Without a brake they all respect, the same mistake happens many times faster. Details in the <a href="https://github.com/inematds/enxame-com-conta/blob/main/casos/lote-135.md" target="_blank" rel="noopener">case report (in Portuguese)</a>.</div>
+</div></section>
+
+<section id="ficha"><div class="wrap">
+  <span class="chip">The Cost Sheet</span>
+  <h2>Four parts, before and after running</h2>
+  <p class="sub">The sheet is a text file you copy into the task folder and fill out. If you can't answer the first part, don't build the swarm.</p>
+  <div class="ficha">
+    <div class="row"><b>1. Is it worth it?</b><span>Can the task be split into parts that don't have to wait for each other? Is it broad (many sources, many files)? Does the deadline matter more than the cost? Is each good result worth much more than a run? If fewer than two answers are “yes,” use <strong>a single agent</strong>.</span></div>
+    <div class="row"><b>2. Calculate first</b><span>Estimate the cost of the swarm and a single agent doing the same task, and where the money goes: work, agent conversations, review, or rework.</span></div>
+    <div class="row"><b>3. Budget and brake</b><span>Required: maximum number of agents, calls, and consecutive failures. If you hit the usage limit, stop everything and wait. Decide who checks the result and how you know it is done. Never leave a loop running unattended.</span></div>
+    <div class="row"><b>4. The actual cost</b><span>Afterward, record each real run with a single agent and with the swarm, and compare the cost per approved deliverable. If the swarm spent Y times more and delivered X times better, with Y greater than X and the deadline making no difference, it was expensive.</span></div>
+  </div>
+</div></section>
+
+<div id="tecnico" class="techhead"><div class="wrap">
+  <span class="chip">Technical section</span>
+  <h2>The kit: for anyone who wants to calculate costs and add a real brake</h2>
+  <p>You don't need this section to understand what came before.</p>
+</div></div>
+
+<div class="techzone">
+
+<section id="oque"><div class="wrap">
+  <span class="chip">What it is</span>
+  <h2>A sheet and two scripts</h2>
+  <p class="sub">Python 3 and the standard library. No packages to install, no API key: the scripts don't call any model. They only calculate and decide whether your command runs.</p>
+  <div class="grid g3">
+    <div class="card"><h3>📝 FICHA-CONTA.md</h3><p>The four parts above, as a checklist to mark and fill out.</p></div>
+    <div class="card"><h3>🧮 conta.py</h3><p><code>estimar</code> calculates the swarm's tokens and cost compared with a single agent, based on a plan. <code>comparar</code> reads the real runs and gives you the cost per useful result and the verdict.</p></div>
+    <div class="card"><h3>🛑 trava.py</h3><p>A brake for any agent call (<code>claude -p</code>, <code>codex exec</code>, or your own script): it stops at the first limit, caps calls, and stops after N consecutive failures. Multiple processes can share the same state file.</p></div>
+  </div>
+</div></section>
+
+<section id="fluxo"><div class="wrap">
+  <span class="chip">How it works</span>
+  <h2>From “what if?” to the verdict</h2>
+  <p class="sub">🧠 you decide · ⚙️ the kit script calculates · 🤖 your agent works, always through the brake.</p>
+  <div class="flow">
+    <span>🧠 Is it worth it?</span><span class="arr">→</span>
+    <span>⚙️ conta.py estimar</span><span class="arr">→</span>
+    <span>🧠 Budget</span><span class="arr">→</span>
+    <span>🤖 Agents through trava.py</span><span class="arr">→</span>
+    <span>🧠 Record runs</span><span class="arr">→</span>
+    <span>⚙️ conta.py comparar</span><span class="arr">→</span>
+    <span>🧠 Decide</span>
+  </div>
+</div></section>
+
+<section id="pre"><div class="wrap">
+  <span class="chip">Requirements</span>
+  <h2>What you need</h2>
+  <p class="sub">Just Python 3 and the downloaded kit. The brake uses the system's file locking (<code>fcntl</code>), so it runs on Linux and macOS. On Windows, use WSL.</p>
+  <div class="grid g2">
+    <div class="card"><h3>Download the kit</h3><p>Clone the repository and enter the folder.</p><pre><span class="k">git clone</span> <span class="s"><span class="nw">https://github.com/inematds/enxame-com-conta</span></span>
+<span class="k">cd</span> <span class="nw">enxame-com-conta</span></pre></div>
+    <div class="card"><h3>Check that it works</h3><p>All 15 tests should pass.</p><pre><span class="k">python3 <span class="nw">-m</span> unittest discover <span class="nw">-s</span> tests <span class="nw">-v</span></span>
+<span class="c">Ran 15 tests ... OK</span></pre></div>
+  </div>
+</div></section>
+
+<section id="guia"><div class="wrap">
+  <span class="chip">User guide · step by step</span>
+  <h2>From the sheet to the verdict</h2>
+  <div class="note">The kit files (the sheet, the examples) and the script messages are in Portuguese; this page explains what each one means. The step 7 verdict says: “the swarm costs 5.2× more per approved delivery and gets it right 1.5× more often: it is only worth it if each approved delivery is worth more than 5.2× the cost of a single agent (but it was 2.5× faster: decide whether the deadline is worth it)”.</div>
+  <p class="sub">The outputs below are real outputs from the scripts running the kit examples. The example numbers are illustrative.</p>
+
+  <div class="step"><div class="b">1</div><div>
+    <h3>Answer part 1 of the sheet</h3>
+    <p>Copy the sheet into the task folder. If fewer than two boxes are checked in part 1, use a single agent and stop here.</p>
+<pre><span class="k">mkdir <span class="nw">-p</span></span> <span class="nw">minha-tarefa</span>
+<span class="k">cp</span> <span class="nw">FICHA-CONTA.md</span> <span class="nw">minha-tarefa/</span></pre>
+  </div></div>
+
+  <div class="step"><div class="b">2</div><div>
+    <h3>Describe the swarm in a plan</h3>
+    <p>Copy the example and replace the numbers with your task's numbers. Sizes are in tokens.</p>
+<pre><span class="k">cp</span> <span class="nw">exemplos/plano-enxame.json</span> plano.json</pre>
+    <ul class="campos"><li><code>agentes</code>: how many agents in the swarm (6)</li><li><code>rodadas</code>: how many rounds each one runs (3)</li><li><code>contexto</code>: what each agent reads every round (20000)</li><li><code>tarefa</code>: the request itself (2000)</li><li><code>saida_por_agente</code>: what each agent writes per round (3000)</li><li><code>mensagens_por_rodada, tamanho_mensagem</code>: talk between agents (2 and 1500)</li><li><code>revisores</code>: how many check everything (1)</li><li><code>retrabalho</code>: fraction redone, from 0 to 1 (0.3)</li><li><code>um_agente</code>: the same work done by a single agent: rounds and output (4 and 8000)</li><li><code>preco</code>: US$ per million tokens, input and output (3.0 and 15.0)</li></ul>
+  </div></div>
+
+  <div class="step"><div class="b">3</div><div>
+    <h3>Estimate before running</h3>
+    <p>You'll see the cost both ways, how many times more the swarm costs, and where the money goes (in %). Below is the output with the example numbers, unchanged.</p>
+<pre><span class="k">python3 conta.py estimar plano.json</span>
+<span class="c">"enxame":    {"entrada": 712400, "saida": 85800, "custo": 3.4242}
+"um_agente": {"entrada": 88000, "saida": 8000, "custo": 0.384}
+"multiplicador_tokens": 8.3
+"onde_vai": {"trabalho": 63.1, "coordenacao": 8.6, "revisao": 5.1, "retrabalho": 23.1}</span></pre>
+    <p>The cost model is deliberately simple: it helps compare architectures, not predict the bill to the cent. The real cost comes from step 7.</p>
+  </div></div>
+
+  <div class="step"><div class="b">4</div><div>
+    <h3>Set the budget</h3>
+    <p>In part 3 of the sheet, set the maximum number of agents, calls, and consecutive failures. Those numbers become the brake's options.</p>
+  </div></div>
+
+  <div class="step"><div class="b">5</div><div>
+    <h3>Run every call through the brake</h3>
+    <p>All calls for the task use the same state file. If you hit the limit (429, “rate limit,” “hit your limit”…), it blocks everyone for <code>--pausa-min</code> minutes (default 60).</p>
+<pre><span class="k">python3 trava.py rodar \
+  <span class="nw">--estado</span> .trava.json \
+  <span class="nw">--max-chamadas</span> 40 \
+  <span class="nw">--max-falhas</span> 3 \
+  <span class="nw">--</span> claude <span class="nw">-p</span></span> <span class="s">"…"</span>
+<span class="c"># exit codes: 75 = blocked by a limit (nothing was called)
+#             76 = call budget used up
+#             77 = too many failures in a row</span></pre>
+    <p>When it blocks, it shows this message:</p>
+<pre><span class="c">[trava] limite detectado: bloqueada por 60 min para todos que usam .trava.json.
+[trava] bloqueada (limite de uso); libera em 59 min. Nada foi chamado.</span></pre>
+  </div></div>
+
+  <div class="step"><div class="b">6</div><div>
+    <h3>Monitor and release carefully</h3>
+    <p><code>status</code> shows calls, failures, and recent events. <code>liberar</code> clears the block after you have checked what happened. Both use <code>.trava.json</code> by default; if you used another file in step 5, pass the same <code>--estado</code>.</p>
+<pre><span class="k">python3 trava.py status</span>
+<span class="c">{"chamadas": 1, "falhas_seguidas": 0, "bloqueada_ate": 0, "motivo": "", "ultimos": [{"rc": 0, "evento": "ok", …}]}</span>
+<span class="k">python3 trava.py liberar</span>   <span class="c"># <span class="nw">--zerar-chamadas</span> also resets the counter</span></pre>
+  </div></div>
+
+  <div class="step"><div class="b">7</div><div>
+    <h3>Record runs and compare</h3>
+    <p>For the same task, with a single agent and with the swarm, record: <code>arquitetura</code>, <code>custo</code>, <code>aprovada</code>, <code>retrabalho</code>, <code>minutos</code>.</p>
+<pre><span class="k">cp</span> exemplos/execucoes.json execucoes.json</pre>
+    <ul class="campos"><li><code>arquitetura</code>: <code>um_agente</code> (single agent) or <code>enxame</code> (swarm), only these two values</li><li><code>custo</code>: what that run cost</li><li><code>aprovada</code>: <code>true</code> if someone approved the delivery, <code>false</code> if not</li><li><code>retrabalho</code>: fraction redone, from 0 to 1</li><li><code>minutos</code>: how long it took</li></ul>
+    <p>Then run it on your file. Below, the output for the example:</p>
+<pre><span class="k">python3 conta.py comparar execucoes.json</span>
+<span class="c">"um_agente": {"aprovadas": 2, "custo_total": 1.2, "cru": 0.6, "minutos_medio": 17.7}
+"enxame":    {"aprovadas": 3, "custo_total": 9.3, "cru": 3.1, "minutos_medio": 7.0}
+"veredito": "o enxame custa 5.2× mais por entrega aprovada e acerta 1.5× mais: só vale se cada
+  entrega aprovada valer mais que 5.2× o custo de um agente só (mas foi 2.5× mais rápido:
+  decida se o prazo vale isso)"</span></pre>
+    <p><code>cru</code> is the cost per useful result. The final decision is yours: keep the swarm only if the extra result or the time saved is worth the extra cost.</p>
+  </div></div>
+</div></section>
+
+<section id="roadmap"><div class="wrap">
+  <span class="chip">Roadmap</span>
+  <h2>What's next</h2>
+  <p class="sub">The kit grows with real cases.</p>
+  <div class="phase"><div class="tag">Now</div><div class="d"><strong>Kit v1.0.1</strong><span>Cost Sheet, conta.py (estimate and compare), trava.py, the lote-135 case, and 15 tests.</span></div></div>
+  <div class="phase"><div class="tag">Coming soon</div><div class="d"><strong>Explainer video</strong><span>On this page, in all three languages.</span></div></div>
+  <div class="phase"><div class="tag">Later</div><div class="d"><strong>More measured cases</strong><span>Real swarm runs compared with a single agent, with the cost per useful result published.</span></div></div>
+</div></section>
+
+</div>
+
+<section class="fecho"><div class="wrap">
+  <h2>So, will you build the swarm or measure first?</h2>
+  <p>The Cost Sheet, scripts, and real case are free on inema.club, right on the web.</p>
+  <a class="btn" href="https://inema.club" target="_blank" rel="noopener">INEMA.CLUB</a>
+</div></section>
+
+<footer>
+  <div class="wrap">
+    <div class="pill">Python 3</div><div class="pill">Standard library</div><div class="pill">No API</div>
+    <p style="margin-top:18px">Enxame com Conta · open kit, MIT license ·
+      <a href="https://github.com/inematds/enxame-com-conta">inematds/enxame-com-conta</a> ·
+      sibling kit: <a href="https://inematds.github.io/enxame-antigravity/guia/en/">Swarm Sheet, for splitting Google's /swarm</a> ·
+      <a href="https://inema.club">INEMA.CLUB</a></p>
+  </div>
+</footer>
+
+<script>
+  (function(){
+    var KEY='enxame-com-conta-theme';
+    var b=document.body, t=document.getElementById('themeToggle');
+    try{ if(localStorage.getItem(KEY)==='light'){ b.classList.add('light'); t.textContent='☀️'; } }catch(e){}
+    t.addEventListener('click',function(){
+      var light=b.classList.toggle('light');
+      t.textContent=light?'☀️':'🌙';
+      try{ localStorage.setItem(KEY, light?'light':'dark'); }catch(e){}
+    });
+  })();
+</script>
+</body>
+</html>
