@@ -1,6 +1,6 @@
 # enxame-com-conta
 
-[![La cuenta del enjambre](guia/assets/banner-es.jpg)](https://inematds.github.io/enxame-com-conta/guia/es/)
+[![La cuenta del enjambre](guia/assets/banner-es.jpg)](https://linnoff88-dev.github.io/
 
 **🇧🇷 [Português](README.md) · 🇺🇸 [English](README.en.md) · 🇪🇸 [Español](README.es.md)**
 
@@ -14,7 +14,7 @@ calculan el costo y limitan el gasto. Para entenderlo, basta con leer; para usar
 
 ## 📖 Guía de uso
 
-Guía completa (landing + paso a paso): **https://inematds.github.io/enxame-com-conta/guia/es/**
+Guía completa (landing + paso a paso): **https://linnoff88-dev.github.io/
 
 ---
 
@@ -35,7 +35,7 @@ ni a API.
 | `conta.py estimar` | estima tokens y costo del enjambre × un agente, y dónde se va el costo (trabajo, coordinación, revisión, retrabajo) |
 | `conta.py comparar` | con ejecuciones reales de la misma tarea, calcula el **CRU — costo por resultado útil** — y da el veredicto |
 | `trava.py` | freno para cualquier llamada de agente: se detiene en el 1.er límite, tiene un presupuesto de llamadas y se detiene después de N fallos |
-| `casos/lote-135.md` (en portugués) | caso real de INEMA: 12.619 rechazos por límite en ~34 h por falta de freno |
+| `casos/lote-135.md` (en portugués) | caso real de ARCKHÉ: 12.619 rechazos por límite en ~34 h por falta de freno |
 
 ## El proceso, de principio a fin
 
@@ -83,11 +83,11 @@ python3 -m unittest discover -s tests -v
   https://www.anthropic.com/engineering/multi-agent-research-system — "los sistemas multiagente usan unas 15× más
   tokens que los chats"; "los sistemas multiagente requieren tareas cuyo valor sea lo bastante alto como para cubrir
   el rendimiento adicional".
-- Caso lote-135: registro interno de INEMA, 15–17/11/2026 (`casos/lote-135.md` (en portugués)).
+- Caso lote-135: registro interno de ARCKHÉ, 15–17/11/2026 (`casos/lote-135.md` (en portugués)).
 
 ## Relacionado
 
-- [enxame-antigravity](https://inematds.github.io/enxame-antigravity/guia/): la Ficha del Enjambre para el /swarm de
+- [enxame-antigravity](https://linnoff88-dev.github.io/ la Ficha del Enjambre para el /swarm de
   Google (responsable de cada parte, quién revisa, cuándo detenerse).
 
-Licencia MIT · INEMA.CLUB — contenido abierto y gratuito.
+Licencia MIT · ARCKHÉ AI — contenido abierto y gratuito.

@@ -1,6 +1,6 @@
 # enxame-com-conta
 
-[![The swarm’s bill](guia/assets/banner-en.jpg)](https://inematds.github.io/enxame-com-conta/guia/en/)
+[![The swarm’s bill](guia/assets/banner-en.jpg)](https://linnoff88-dev.github.io/
 
 **🇧🇷 [Português](README.md) · 🇺🇸 [English](README.en.md) · 🇪🇸 [Español](README.es.md)**
 
@@ -15,7 +15,7 @@ using the kit requires Python 3.
 
 ## 📖 User guide
 
-Complete guide (landing page + step-by-step instructions): **https://inematds.github.io/enxame-com-conta/guia/en/**
+Complete guide (landing page + step-by-step instructions): **https://linnoff88-dev.github.io/
 
 ---
 
@@ -36,7 +36,7 @@ or API calls.
 | `conta.py estimar` | estimates tokens and cost for a swarm × a single agent, and where the cost goes (work, coordination, review, rework) |
 | `conta.py comparar` | using real runs of the same task, calculates the **CRU — cost per useful result** — and gives a verdict |
 | `trava.py` | brake for any agent call: stops at the first limit, has a call budget, and stops after N consecutive failures |
-| `casos/lote-135.md` (in Portuguese) | real INEMA case: 12,619 limit rejections in ~34 h due to a missing brake |
+| `casos/lote-135.md` (in Portuguese) | real ARCKHÉ case: 12,619 limit rejections in ~34 h due to a missing brake |
 
 ## The process, from start to finish
 
@@ -85,10 +85,10 @@ python3 -m unittest discover -s tests -v
   https://www.anthropic.com/engineering/multi-agent-research-system — “multi-agent systems use about 15× more
   tokens than chats”; “multi-agent systems require tasks where the value of the task is high enough to pay for
   the increased performance”.
-- Batch-135 case: internal INEMA record, 15–17/11/2026 (`casos/lote-135.md` (in Portuguese)).
+- Batch-135 case: internal ARCKHÉ record, 15–17/11/2026 (`casos/lote-135.md` (in Portuguese)).
 
 ## Related
 
-- [enxame-antigravity](https://inematds.github.io/enxame-antigravity/guia/): the Swarm Cost Sheet for Google’s /swarm (ownership by component, who checks, when to stop).
+- [enxame-antigravity](https://linnoff88-dev.github.io/ the Swarm Cost Sheet for Google’s /swarm (ownership by component, who checks, when to stop).
 
-MIT License · INEMA.CLUB — open and free content.
+MIT License · ARCKHÉ AI — open and free content.

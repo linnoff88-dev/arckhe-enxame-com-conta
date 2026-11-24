@@ -1,4 +1,4 @@
-﻿# enxame-com-conta
+# enxame-com-conta
 
 <div align="center">
   <img src="capa/logo.svg" alt="Arckhé AI" height="48" />
@@ -6,7 +6,7 @@
 </div>
 
 
-[![A conta do enxame](guia/assets/banner.jpg)](https://inematds.github.io/enxame-com-conta/guia/)
+[![A conta do enxame](guia/assets/banner.jpg)](https://linnoff88-dev.github.io/
 
 **ðŸ‡§ðŸ‡· [PortuguÃªs](README.md) Â· ðŸ‡ºðŸ‡¸ [English](README.en.md) Â· ðŸ‡ªðŸ‡¸ [EspaÃ±ol](README.es.md)**
 
@@ -20,7 +20,7 @@ fazem a conta e seguram o gasto. Para entender, Ã© sÃ³ ler; para usar o kit,
 
 ## ðŸ“– Guia de uso
 
-Guia completo (landing + passo a passo): **https://inematds.github.io/enxame-com-conta/guia/**
+Guia completo (landing + passo a passo): **https://linnoff88-dev.github.io/
 
 ---
 
@@ -41,7 +41,7 @@ nem API.
 | `conta.py estimar` | estima tokens e custo do enxame Ã— um agente, e onde o custo vai (trabalho, coordenaÃ§Ã£o, revisÃ£o, retrabalho) |
 | `conta.py comparar` | com execuÃ§Ãµes reais da mesma tarefa, calcula o **CRU â€” custo por resultado Ãºtil** â€” e dÃ¡ o veredito |
 | `trava.py` | freio para qualquer chamada de agente: para no 1Âº limite, tem orÃ§amento de chamadas e para depois de N falhas |
-| `casos/lote-135.md` | caso real INEMA: 12.619 recusas por limite em ~34 h por falta de trava |
+| `casos/lote-135.md` | caso real ARCKHÉ: 12.619 recusas por limite em ~34 h por falta de trava |
 
 ## O processo, do inÃ­cio ao fim
 
@@ -89,14 +89,14 @@ python3 -m unittest discover -s tests -v
   https://www.anthropic.com/engineering/multi-agent-research-system â€” "multi-agent systems use about 15Ã— more
   tokens than chats"; "multi-agent systems require tasks where the value of the task is high enough to pay for
   the increased performance".
-- Caso lote-135: registro interno INEMA, 15â€“17/11/2026 (`casos/lote-135.md`).
+- Caso lote-135: registro interno ARCKHÉ, 15â€“17/11/2026 (`casos/lote-135.md`).
 
 ## Relacionado
 
-- [enxame-antigravity](https://inematds.github.io/enxame-antigravity/guia/): a Ficha do Enxame para o /swarm do
+- [enxame-antigravity](https://linnoff88-dev.github.io/ a Ficha do Enxame para o /swarm do
   Google (dono por pedaÃ§o, quem confere, quando parar).
 
-LicenÃ§a MIT Â· INEMA.CLUB â€” conteÃºdo aberto e gratuito.
+LicenÃ§a MIT Â· ARCKHÉ AI â€” conteÃºdo aberto e gratuito.
 
 ---
 
