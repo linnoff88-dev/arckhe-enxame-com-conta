@@ -50,7 +50,7 @@ class Conta(unittest.TestCase):
     def test_enxame_sem_aprovacao_nao_vale(self):
         r = conta.comparar([{"arquitetura": "um_agente", "custo": 1, "aprovada": True},
                             {"arquitetura": "enxame", "custo": 9, "aprovada": False}])
-        self.assertIn("não vale", r["veredito"])
+        self.assertIn("nêo vale", r["veredito"])
 
     def test_falta_comparacao(self):
         r = conta.comparar([{"arquitetura": "enxame", "custo": 9, "aprovada": True}])

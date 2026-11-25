@@ -9,11 +9,11 @@ em ~34 h porque nada o fazia parar no primeiro "limite atingido".
   python3 trava.py liberar [--estado arq]              zera o bloqueio (você decidiu continuar)
 
 Regras (todas no arquivo de estado, que vários processos podem compartilhar):
-  1. bloqueada por limite → não roda nada até a hora de liberar (sai com 75, sem chamar o comando);
+  1. bloqueada por limite → nêo roda nada até a hora de liberar (sai com 75, sem chamar o comando);
   2. no 1º sinal de limite na saída (429, rate limit, "hit your ... limit") → bloqueia e sai com 75;
   3. --max-chamadas atingido → para (sai com 76): é o orçamento da tarefa;
-  4. --max-falhas seguidas → para (sai com 77): falha repetida não é motivo para tentar de novo.
-Só biblioteca padrão. A trava não chama modelo nenhum: ela só decide se o SEU comando roda.
+  4. --max-falhas seguidas → para (sai com 77): falha repetida nêo é motivo para tentar de novo.
+Só biblioteca padrêo. A trava nêo chama modelo nenhum: ela só decide se o SEU comando roda.
 """
 import argparse
 import fcntl

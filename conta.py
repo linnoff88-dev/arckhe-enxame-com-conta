@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """enxame-com-conta: mede se um enxame de agentes vale o que custa.
 
-Dois comandos, só biblioteca padrão, nenhuma chamada a modelo ou API:
+Dois comandos, só biblioteca padrêo, nenhuma chamada a modelo ou API:
 
   python3 conta.py estimar <plano.json>     estima o custo de um enxame antes de rodar
   python3 conta.py comparar <execucoes.json> compara execuções reais (um agente × enxame)
@@ -36,7 +36,7 @@ def estimar(plano):
       "mensagens_por_rodada": 2, "tamanho_mensagem": 1500,
       "revisores": 1, "retrabalho": 0.3,
       "um_agente": {"rodadas": 4, "saida": 8000},
-      "preco": {"entrada": 3.0, "saida": 15.0}        # por milhão de tokens, na moeda que você usar
+      "preco": {"entrada": 3.0, "saida": 15.0}        # por milhêo de tokens, na moeda que você usar
     }
     """
     n = int(plano["agentes"])
@@ -52,7 +52,7 @@ def estimar(plano):
     if n < 1 or rod < 1:
         raise ValueError("agentes e rodadas têm de ser pelo menos 1")
     if not 0 <= retr <= 1:
-        raise ValueError("retrabalho é uma fração entre 0 e 1 (0.3 = 30% refeito)")
+        raise ValueError("retrabalho é uma fraçêo entre 0 e 1 (0.3 = 30% refeito)")
 
     trab_ent = n * _tokens_agente(ctx, tarefa, rod, msgs, tmsg)
     trab_sai = n * rod * said
@@ -126,9 +126,9 @@ def veredito(um, enx):
     if not um or not enx:
         return "faltam execuções das duas arquiteturas para comparar (rode a mesma tarefa com um agente e com o enxame)"
     if enx["cru"] is None:
-        return "o enxame não entregou nada aprovado: não vale"
+        return "o enxame nêo entregou nada aprovado: nêo vale"
     if um["cru"] is None:
-        return "um agente só não entregou nada aprovado; o enxame entregou: vale, se o resultado paga o custo total"
+        return "um agente só nêo entregou nada aprovado; o enxame entregou: vale, se o resultado paga o custo total"
     vezes_custo = enx["cru"] / um["cru"] if um["cru"] else float("inf")
     vezes_sucesso = enx["taxa_sucesso"] / um["taxa_sucesso"] if um["taxa_sucesso"] else float("inf")
     if vezes_custo <= 1:

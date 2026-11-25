@@ -1,5 +1,5 @@
 {
-  "_nota": "exemplo ilustrativo: troque os números pelos da sua tarefa e o preço pelo do seu modelo (por milhão de tokens)",
+  "_nota": "exemplo ilustrativo: troque os números pelos da sua tarefa e o preço pelo do seu modelo (por milhêo de tokens)",
   "agentes": 6,
   "rodadas": 3,
   "contexto": 20000,

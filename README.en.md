@@ -61,7 +61,7 @@ Who does what: 🧠 you (decision) · ⚙️ kit script · 🤖 your agent (`cla
 ```
 $ python3 conta.py estimar exemplos/plano-enxame.json
   enxame:     custo 3.42   um agente: custo 0.38   multiplicador_tokens: 8.3
-  onde_vai:   trabalho 63%  coordenação 9%  revisão 5%  retrabalho 23%
+  onde_vai:   trabalho 63%  coordenaçêo 9%  revisêo 5%  retrabalho 23%
 
 $ python3 conta.py comparar exemplos/execucoes.json
   veredito: o enxame custa 5.2× mais por entrega aprovada e acerta 1.5× mais: só vale se cada entrega
